@@ -19,7 +19,12 @@ project "assimp"
 		"RAPIDJSON_HAS_STDSTRING=1",
 		"RAPIDJSON_NOMEMBERITERATORCLASS",
 	}
-
+	
+	vpaths
+	{
+		["code/*"] = { "Inc/**.h", "Inc/**.cpp" },
+	}
+	
 	files
 	{
 		"include/**",
