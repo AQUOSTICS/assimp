@@ -11,10 +11,13 @@ project "assimp"
 	defines
 	{
 		"_CRT_SECURE_NO_WARNINGS",
+		"ASSIMP_BUILD_NO_EXPORT",
 		"ASSIMP_BUILD_NO_M3D_IMPORTER",
-		"ASSIMP_BUILD_NO_M3D_EXPORTER",
 		"ASSIMP_BUILD_NO_C4D_IMPORTER",
 		"ASSIMP_BUILD_NO_IFC_IMPORTER",
+		"ASSIMP_BUILD_NO_OPENGEX_IMPORTER",
+		"ASSIMP_BUILD_NO_OGRE_IMPORTER",
+		"ASSIMP_BUILD_NO_ASSBIN_IMPORTER",
 		"ASSIMP_IMPORTER_GLTF_USE_OPEN3DGC=1",
 		"RAPIDJSON_HAS_STDSTRING=1",
 		"RAPIDJSON_NOMEMBERITERATORCLASS",
@@ -25,6 +28,9 @@ project "assimp"
 		"include/**",
         "code/**.h",
         "code/**.cpp",
+		"contrib/unzip/*",
+		"contrib/zlib/*",
+		"contrib/Open3DGC/*",
 	}
 
     includedirs
@@ -34,6 +40,7 @@ project "assimp"
 		"include",
 		"contrib",
 		"contrib/zlib",
+		"contrib/Open3DGC",
 		"contrib/pugixml/src",
 		"contrib/rapidjson/include",
 		"contrib/unzip",
