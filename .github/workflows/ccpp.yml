@@ -6,6 +6,9 @@ on:
   pull_request:
     branches: [ master ]
 
+permissions:
+  contents: read # to fetch code (actions/checkout)
+
 jobs:
   job:
     name: ${{ matrix.name }}-build-and-test
@@ -44,7 +47,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    
+      with:
+          submodules: true
+          
     - uses: lukka/get-cmake@latest
     
     - uses: ilammy/msvc-dev-cmd@v1
@@ -110,7 +115,7 @@ jobs:
         cmakeListsOrSettingsJson: CMakeListsTxtAdvanced
         cmakeListsTxtPath: '${{ github.workspace }}/CMakeLists.txt'
         cmakeAppendedArgs: '-GNinja -DCMAKE_BUILD_TYPE=Release ${{ steps.windows_extra_cmake_args.outputs.args }} ${{ steps.hunter_extra_cmake_args.outputs.args }}'
-        buildWithCMakeArgs: '-- -v'
+        buildWithCMakeArgs: '-- -j 24 -v'
         buildDirectory: '${{ github.workspace }}/build/'
         
     - name: Exclude certain tests in Hunter specific builds

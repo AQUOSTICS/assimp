@@ -57,6 +57,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <assimp/importerdesc.h>
 
 #include <numeric>
+#include <utility>
 
 using namespace Assimp;
 
@@ -110,16 +111,11 @@ static const aiImporterDesc desc = {
 
 // ------------------------------------------------------------------------------------------------
 // Constructor to be privately used by Importer
-DXFImporter::DXFImporter()
-: BaseImporter() {
-    // empty
-}
+DXFImporter::DXFImporter() = default;
 
 // ------------------------------------------------------------------------------------------------
 // Destructor, private as well
-DXFImporter::~DXFImporter() {
-    // empty
-}
+DXFImporter::~DXFImporter() = default;
 
 // ------------------------------------------------------------------------------------------------
 // Returns whether the class can handle the format of the given file.
@@ -155,7 +151,7 @@ void DXFImporter::InternReadFile( const std::string& filename, aiScene* pScene, 
     // DXF files can grow very large, so read them via the StreamReader,
     // which will choose a suitable strategy.
     file->Seek(0,aiOrigin_SET);
-    StreamReaderLE stream( file );
+    StreamReaderLE stream( std::move(file) );
 
     DXF::LineReader reader (stream);
     DXF::FileData output;
@@ -475,7 +471,7 @@ void DXFImporter::ParseBlocks(DXF::LineReader& reader, DXF::FileData& output) {
 // ------------------------------------------------------------------------------------------------
 void DXFImporter::ParseBlock(DXF::LineReader& reader, DXF::FileData& output) {
     // push a new block onto the stack.
-    output.blocks.push_back( DXF::Block() );
+    output.blocks.emplace_back();
     DXF::Block& block = output.blocks.back();
 
     while( !reader.End() && !reader.Is(0,"ENDBLK")) {
@@ -520,7 +516,7 @@ void DXFImporter::ParseBlock(DXF::LineReader& reader, DXF::FileData& output) {
 // ------------------------------------------------------------------------------------------------
 void DXFImporter::ParseEntities(DXF::LineReader& reader, DXF::FileData& output) {
     // Push a new block onto the stack.
-    output.blocks.push_back( DXF::Block() );
+    output.blocks.emplace_back();
     DXF::Block& block = output.blocks.back();
 
     block.name = AI_DXF_ENTITIES_MAGIC_BLOCK;
@@ -550,7 +546,7 @@ void DXFImporter::ParseEntities(DXF::LineReader& reader, DXF::FileData& output) 
 }
 
 void DXFImporter::ParseInsertion(DXF::LineReader& reader, DXF::FileData& output) {
-    output.blocks.back().insertions.push_back( DXF::InsertBlock() );
+    output.blocks.back().insertions.emplace_back();
     DXF::InsertBlock& bl = output.blocks.back().insertions.back();
 
     while( !reader.End() && !reader.Is(0)) {
