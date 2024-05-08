@@ -45,6 +45,7 @@ project "assimp"
 		"contrib/rapidjson/include",
 		"contrib/unzip",
 		"contrib/openddlparser/include",
+		"contrib/utf8cpp/source",
 	}
 
 	filter "system:windows"
